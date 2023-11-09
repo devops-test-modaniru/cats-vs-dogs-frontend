@@ -20,6 +20,7 @@
         </div>
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -31,16 +32,35 @@ export default {
   },
   data(){
     return {
-      cats: 0,
-      dogs: 0
+      cats: null,
+      dogs: null,
+      connection: null
     }
   },
   methods:{
-    catClick(){
-      this.cats++
+    async catClick(){
+      const res = await fetch("http://localhost:80/v1/cat", {
+        method: 'PUT'
+      })
+      console.log(res)
     },
-    dogClick(){
-      this.dogs++
+    async dogClick(){
+      const res = await fetch("http://localhost:80/v1/dog", {
+        method: 'PUT'
+      })
+      console.log(res)
+    }
+  },
+  created: function(){
+    this.connection = new WebSocket("ws://localhost/w")
+    this.connection.onopen = function(event){
+      console.log(event)
+    }
+    const obj = this
+    this.connection.onmessage = function(event){
+      const response = JSON.parse(event.data)
+      obj.cats = response.cat_count
+      obj.dogs = response.dog_count
     }
   },
   computed:{
@@ -108,6 +128,7 @@ export default {
   width: fit-content;
 }
 .info-container{
+  user-select: none;
   display: flex;
   justify-content: center;
   align-items: flex-end;
