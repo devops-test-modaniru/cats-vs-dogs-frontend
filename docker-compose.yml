@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  cat-vs-dogs:
+    build: ../bio-vue/cat-vs-dogs 
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - redis
+  redis:
+    image: redis
+    restart: always
+    volumes:
+        - redis_data:/data
+  frontend:
+    build: .
+    restart: always
+    ports:
+      - 8081:8080
+    depends_on:
+      - cat-vs-dogs
+  caddy:
+    image: "caddy:latest"
+    ports:
+      - 80:80
+      - 443:443
+    depends_on: 
+      - frontend
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    restart: always
+
+volumes:
+    redis_data: 

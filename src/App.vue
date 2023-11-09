@@ -39,20 +39,20 @@ export default {
   },
   methods:{
     async catClick(){
-      const res = await fetch("http://localhost:80/v1/cat", {
+      const res = await fetch("http://localhost:8080/v1/cat", {
         method: 'PUT'
       })
       console.log(res)
     },
     async dogClick(){
-      const res = await fetch("http://localhost:80/v1/dog", {
+      const res = await fetch("http://localhost:8080/v1/dog", {
         method: 'PUT'
       })
       console.log(res)
     }
   },
   created: function(){
-    this.connection = new WebSocket("ws://localhost/w")
+    this.connection = new WebSocket("ws://localhost:8080/w")
     this.connection.onopen = function(event){
       console.log(event)
     }
