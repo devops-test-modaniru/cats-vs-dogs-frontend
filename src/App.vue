@@ -1,26 +1,121 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <div class="cats" :style="'width:' + catWidth + '%;'" @click="catClick">
+      <div class="info-container">
+        <div class="percent-container">
+          {{ Math.round(catPercent) }}%
+        </div>
+        <div class="vote-container">
+          {{ cats }} голосов
+        </div>
+      </div>
+    </div>
+    <div class="dogs" :style="'width:' + dogWidth + '%;'" @click="dogClick">
+      <div class="info-container">
+        <div class="percent-container">
+          {{ Math.round(dogPercent) }}%
+        </div>
+        <div class="vote-container">
+          {{ dogs }} голосов
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+  },
+  data(){
+    return {
+      cats: 0,
+      dogs: 0
+    }
+  },
+  methods:{
+    catClick(){
+      this.cats++
+    },
+    dogClick(){
+      this.dogs++
+    }
+  },
+  computed:{
+    catWidth: function(){
+      var result = this.catPercent
+      if (result > 90){
+        result = 90
+      } else if (result < 10){
+        result = 10
+      }
+      return result;
+    },
+    dogWidth: function(){
+      return 100 - this.catWidth;
+    },
+    catPercent: function(){
+      if (this.cats + this.dogs == 0){
+        return 50
+      }
+      return (this.cats / (this.cats + this.dogs)) * 100; 
+    },
+    dogPercent: function(){
+      return 100 - this.catPercent;
+    }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+*{
+  margin: 0;
+}
+
+.container{
+  height: 100vh;
+  background-color: black;
+  display: flex;
+}
+.cats{
+  height: 100vh;
+  background-color: aqua;
+  background-image: url(https://99px.ru/sstorage/53/2019/05/tmb_259612_992467.jpg);
+  background-size: cover, 100vh;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transition: width, 0.5s;
+  border-right: 4px solid #fff;
+}
+.dogs{
+  height: 100vh;
+  transition: width, 0.5s;
+  background-image: url(https://png.pngtree.com/background/20230513/original/pngtree-shiba-inu-is-standing-in-the-leaves-picture-image_2505406.jpg);
+  background-size: cover, 100vh;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-color: red;
+  border-left: 4px solid #fff;
+}
+.percent-container{
+  color: white;
+  font-weight: 700;
+  font-size: 72px;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 24px;
+  width: fit-content;
+}
+.info-container{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.vote-container{
+  font-weight: 900;
+  color: #ffffffc0;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: 10px;
 }
 </style>
