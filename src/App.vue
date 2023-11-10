@@ -39,20 +39,20 @@ export default {
   },
   methods:{
     async catClick(){
-      const res = await fetch("https://danilka.site/v1/cat", {
+      const res = await fetch("https://danilka.site/api/v1/cat", {
         method: 'PUT'
       })
       console.log(res)
     },
     async dogClick(){
-      const res = await fetch("https://danilka.site/v1/dog", {
+      const res = await fetch("https://danilka.site/api/v1/dog", {
         method: 'PUT'
       })
       console.log(res)
     }
   },
   created: function(){
-    this.connection = new WebSocket("https://danilka.site/w")
+    this.connection = new WebSocket("wss://danilka.site/api/w")
     this.connection.onopen = function(event){
       console.log(event)
     }

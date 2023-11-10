@@ -2,6 +2,8 @@ version: '3.1'
 
 services:
   cat-vs-dogs:
+    networks:
+      - mynetwork
     build: ../cats-vs-dogs 
     restart: always
     ports:
@@ -9,22 +11,29 @@ services:
     depends_on:
       - redis
   redis:
+    networks:
+      - mynetwork
     image: redis
     restart: always
     volumes:
         - redis_data:/data
   frontend:
+    networks:
+      - mynetwork
     build: .
     restart: always
     ports:
       - 80:80
       - 443:443
     volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./certbot/www:/var/www/certbot/:ro
       - ./certbot/conf/:/etc/nginx/ssl/:ro
     depends_on:
       - cat-vs-dogs
   certbot:
+    networks:
+      - mynetwork
     image: certbot/certbot:latest
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
@@ -32,3 +41,6 @@ services:
 
 volumes:
     redis_data: 
+
+networks:
+  mynetwork:
